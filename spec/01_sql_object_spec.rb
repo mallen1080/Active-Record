@@ -171,6 +171,7 @@ describe SQLObject do
 
         expect(c).to be_instance_of(Cat)
         expect(c.id).to eq(1)
+    
       end
 
       it 'returns nil if no object has the given id' do

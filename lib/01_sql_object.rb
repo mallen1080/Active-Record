@@ -1,9 +1,11 @@
 require_relative 'db_connection'
 require 'active_support/inflector'
+
 # NB: the attr_accessor we wrote in phase 0 is NOT used in the rest
 # of this project. It was only a warm up.
 
 class SQLObject
+
   def self.columns
     return @columns unless @columns.nil?
     output = DBConnection.execute2(<<-SQL)
@@ -84,28 +86,43 @@ class SQLObject
   end
 
   def attribute_values
-    
+    self.class.columns.map { |column| @attributes[column] }
   end
 
   def insert
-    cols = self.class.columns
+    attribute_vals = attribute_values[1..-1]
+    cols = self.class.columns[1..-1]
     col_names = cols.join(",")
     q_marks = []
     cols.length.times { q_marks << "?" }
     q_marks = q_marks.join(",")
-    DBConnection.execute(<<-SQL)
+    DBConnection.execute(<<-SQL, *attribute_vals)
     INSERT INTO
       #{self.class.table_name} (#{col_names})
     VALUES
-      #{q_marks}
+      (#{q_marks})
     SQL
+
+    self.id = DBConnection.last_insert_row_id
   end
 
   def update
-    # ...
+    cols = self.class.columns[1..-1].map { |col| "#{col} = ? " }.join(",")
+    attribute_vals = attribute_values[1..-1]
+
+    DBConnection.execute(<<-SQL, *attribute_vals)
+    UPDATE
+      #{self.class.table_name}
+    SET
+      #{cols}
+    WHERE
+      id = #{self.id}
+    SQL
+
   end
 
   def save
-    # ...
+    insert if id.nil?
+    update unless id.nil?
   end
 end

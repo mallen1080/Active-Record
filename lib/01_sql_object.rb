@@ -1,9 +1,6 @@
 require_relative 'db_connection'
 require 'active_support/inflector'
 
-# NB: the attr_accessor we wrote in phase 0 is NOT used in the rest
-# of this project. It was only a warm up.
-
 class SQLObject
 
   def self.columns
@@ -23,6 +20,7 @@ class SQLObject
       define_method(column) do
         attributes[column]
       end
+
       define_method((column.to_s + "=").to_sym) do |setter|
         attributes[column.to_sym] = setter
       end
@@ -34,9 +32,7 @@ class SQLObject
   end
 
   def self.table_name
-    table_name = "#{self}s".downcase
-    @table_name ||= table_name
-    @table_name
+    @table_name ||= "#{self}s".downcase
   end
 
   def self.all
@@ -51,14 +47,10 @@ class SQLObject
   end
 
   def self.parse_all(results)
-    array = []
-    results.each { |row| array << self.new(row) }
-
-    array
+    results.map { |row| self.new(row) }
   end
 
   def self.find(id)
-
     output = DBConnection.execute(<<-SQL, id)
     SELECT
       *
@@ -107,7 +99,10 @@ class SQLObject
   end
 
   def update
-    cols = self.class.columns[1..-1].map { |col| "#{col} = ? " }.join(",")
+    cols = self.class.columns[1..-1]
+    .map { |col| "#{col} = ? " }
+    .join(",")
+
     attribute_vals = attribute_values[1..-1]
 
     DBConnection.execute(<<-SQL, *attribute_vals)

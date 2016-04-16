@@ -3,6 +3,14 @@ require 'active_support/inflector'
 
 class SQLObject
 
+  def self.table_name
+    @table_name ||= "#{self}s".downcase
+  end
+
+  def self.table_name=(table_name)
+    @table_name = table_name
+  end
+
   def self.columns
     return @columns unless @columns.nil?
     output = DBConnection.execute2(<<-SQL)
@@ -10,6 +18,8 @@ class SQLObject
       *
     FROM
       #{table_name}
+    LIMIT
+      0
     SQL
 
     @columns = output.first.map(&:to_sym)
@@ -25,14 +35,6 @@ class SQLObject
         attributes[column.to_sym] = setter
       end
     end
-  end
-
-  def self.table_name=(table_name)
-    @table_name = table_name
-  end
-
-  def self.table_name
-    @table_name ||= "#{self}s".downcase
   end
 
   def self.all

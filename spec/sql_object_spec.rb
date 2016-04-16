@@ -1,4 +1,4 @@
-require '01_sql_object'
+require 'sql_object'
 require 'db_connection'
 require 'securerandom'
 
@@ -171,7 +171,7 @@ describe SQLObject do
 
         expect(c).to be_instance_of(Cat)
         expect(c.id).to eq(1)
-    
+
       end
 
       it 'returns nil if no object has the given id' do

@@ -4,7 +4,7 @@ require 'active_support/inflector'
 class SQLObject
 
   def self.table_name
-    @table_name ||= "#{self}s".downcase
+    @table_name ||= self.to_s.tableize
   end
 
   def self.table_name=(table_name)
@@ -84,12 +84,11 @@ class SQLObject
   end
 
   def insert
-    attribute_vals = attribute_values[1..-1]
-    cols = self.class.columns[1..-1]
+    attribute_vals = attribute_values.drop(1)
+    cols = self.class.columns.drop(1)
     col_names = cols.join(",")
-    q_marks = []
-    cols.length.times { q_marks << "?" }
-    q_marks = q_marks.join(",")
+    q_marks = (["?"] * cols.length).join(",")
+
     DBConnection.execute(<<-SQL, *attribute_vals)
     INSERT INTO
       #{self.class.table_name} (#{col_names})
@@ -101,11 +100,11 @@ class SQLObject
   end
 
   def update
-    cols = self.class.columns[1..-1]
+    cols = self.class.columns.drop(1)
     .map { |col| "#{col} = ? " }
     .join(",")
 
-    attribute_vals = attribute_values[1..-1]
+    attribute_vals = attribute_values.drop(1)
 
     DBConnection.execute(<<-SQL, *attribute_vals)
     UPDATE

@@ -4,8 +4,10 @@ require_relative 'sql_object'
 module Searchable
   def where(params)
     where_line, vals = [], []
+    
     params.each do |key, val|
-      where_line << "#{key} = ? "; vals << val.to_s
+      where_line << "#{key} = ? "
+      vals << val.to_s
     end
 
     where_line = where_line.join("AND ")

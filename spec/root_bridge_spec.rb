@@ -1,14 +1,14 @@
-require 'root_bridge'
+require 'root_object'
 require 'db_connection'
 require 'securerandom'
 
-describe RootBridge do
+describe RootObject do
   before(:each) { DBConnection.reset }
   after(:each) { DBConnection.reset }
 
   context 'before ::finalize!' do
     before(:each) do
-      class Cat < RootBridge
+      class Cat < RootObject
       end
     end
 
@@ -24,7 +24,7 @@ describe RootBridge do
 
     describe '::table_name=' do
       it 'sets table name' do
-        class Human < RootBridge
+        class Human < RootObject
           self.table_name = 'humans'
         end
 
@@ -67,11 +67,11 @@ describe RootBridge do
 
   context 'after ::finalize!' do
     before(:all) do
-      class Cat < RootBridge
+      class Cat < RootObject
         self.finalize!
       end
 
-      class Human < RootBridge
+      class Human < RootObject
         self.table_name = 'humans'
 
         self.finalize!

@@ -1,7 +1,7 @@
 require_relative 'db_connection'
 require 'active_support/inflector'
 
-class RootBridge
+class RootObject
 
   def self.table_name
     @table_name ||= self.to_s.tableize

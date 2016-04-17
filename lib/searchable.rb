@@ -1,10 +1,10 @@
 require_relative 'db_connection'
-require_relative 'root_bridge'
+require_relative 'root_object'
 
 module Searchable
   def where(params)
     where_line, vals = [], []
-    
+
     params.each do |key, val|
       where_line << "#{key} = ? "
       vals << val.to_s
@@ -24,6 +24,6 @@ module Searchable
   end
 end
 
-class RootBridge
+class RootObject
   extend Searchable
 end

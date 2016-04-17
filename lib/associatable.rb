@@ -83,6 +83,6 @@ module Associatable
   end
 end
 
-class RootBridge
+class RootObject
   extend Associatable
 end

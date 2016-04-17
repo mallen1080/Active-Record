@@ -5,13 +5,13 @@ describe 'Associatable' do
   after(:each) { DBConnection.reset }
 
   before(:all) do
-    class Cat < RootBridge
+    class Cat < RootObject
       belongs_to :human, foreign_key: :owner_id
 
       finalize!
     end
 
-    class Human < RootBridge
+    class Human < RootObject
       self.table_name = 'humans'
 
       has_many :cats, foreign_key: :owner_id
@@ -20,7 +20,7 @@ describe 'Associatable' do
       finalize!
     end
 
-    class House < RootBridge
+    class House < RootObject
       has_many :humans
 
       finalize!
@@ -29,7 +29,7 @@ describe 'Associatable' do
 
   describe '::assoc_options' do
     it 'defaults to empty hash' do
-      class TempClass < RootBridge
+      class TempClass < RootObject
       end
 
       expect(TempClass.assoc_options).to eq({})

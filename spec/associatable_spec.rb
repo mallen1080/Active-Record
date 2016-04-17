@@ -47,11 +47,11 @@ describe 'AssocOptions' do
 
   describe 'AssocOptions' do
     before(:all) do
-      class Cat < SQLObject
+      class Cat < RootBridge
         self.finalize!
       end
 
-      class Human < SQLObject
+      class Human < RootBridge
         self.table_name = 'humans'
 
         self.finalize!
@@ -81,13 +81,13 @@ describe 'Associatable' do
   after(:each) { DBConnection.reset }
 
   before(:all) do
-    class Cat < SQLObject
+    class Cat < RootBridge
       belongs_to :human, foreign_key: :owner_id
 
       finalize!
     end
 
-    class Human < SQLObject
+    class Human < RootBridge
       self.table_name = 'humans'
 
       has_many :cats, foreign_key: :owner_id
@@ -96,7 +96,7 @@ describe 'Associatable' do
       finalize!
     end
 
-    class House < SQLObject
+    class House < RootBridge
       has_many :humans
 
       finalize!

@@ -83,6 +83,6 @@ module Associatable
   end
 end
 
-class SQLObject
+class RootBridge
   extend Associatable
 end

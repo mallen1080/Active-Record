@@ -5,11 +5,11 @@ describe 'Searchable' do
   after(:each) { DBConnection.reset }
 
   before(:all) do
-    class Cat < SQLObject
+    class Cat < RootBridge
       finalize!
     end
 
-    class Human < SQLObject
+    class Human < RootBridge
       self.table_name = 'humans'
 
       finalize!

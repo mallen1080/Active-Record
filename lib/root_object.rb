@@ -21,7 +21,6 @@ class RootObject
     LIMIT
       0
     SQL
-
     @columns = output.first.map(&:to_sym)
   end
 

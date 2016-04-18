@@ -61,6 +61,7 @@ class RootObject
     WHERE
       id = ?
     SQL
+
     return nil if output.empty?
     self.new(output.first)
   end
@@ -114,7 +115,6 @@ class RootObject
     WHERE
       id = #{self.id}
     SQL
-
   end
 
   def save

@@ -20,7 +20,6 @@ RubyRooted into your Rails repo, make sure that your project is using an SQLite3
 - ::find: looks up a single record by primary key
 - ::where: takes a params hash and returns an array where all objects match the params
 - ::finalize!: sets up setters and getters for all columns in the db
-
 - #attributes: return hash with keys as db column names and values as column values
 - #attribute_values: returns array with attribute values
 - #insert: inserts a new row into the table to represent the RootObject.
